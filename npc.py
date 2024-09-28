@@ -21,8 +21,6 @@ def result(state : NDArray, action : NDArray) -> NDArray:
 
 def terminal_util(state : NDArray) -> tuple:
     '''Given a state, returns whether the game is over and the utility of the state'''
-    if np.count_nonzero(state) == 9:
-        return (True, 0)
     diag, offdiag = (np.diagonal(state), np.fliplr(state).diagonal())
     if sum(diag) == 3 or sum(offdiag) == 3:
         return (True, 1)
@@ -33,6 +31,8 @@ def terminal_util(state : NDArray) -> tuple:
             return (True, 1)
         if sum(state[:, i]) == -3 or sum(state[i, :]) == -3:
             return (True, -1)
+    if np.count_nonzero(state) == 9:
+        return (True, 0)
     return (False, None)
 
 def max_value(state : NDArray) -> NDArray:
@@ -73,8 +73,8 @@ def minimax(state : NDArray) -> NDArray:
                 action = a
     return action
 
-board = np.array([[0,0,0],
-                    [0,0,0],
-                    [0,0,0]])
+# board = np.array([[1, -1, 0],
+#                   [-1, -1, 1],
+#                   [1, 1, 0]])
 
-print(minimax(board))
+# print(minimax(board)) # Expected output: [2, 1]
