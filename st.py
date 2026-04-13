@@ -2,21 +2,59 @@ import streamlit as st
 import numpy as np
 from npc import players, minimax, terminal_util
 
+st.set_page_config(page_title="PvE Tic-Tac-Toe", page_icon="⚡")
 
 st.markdown(
     """
     <style>
-        .game-button button{
-            font-size: 50px;
+        /* Schriften importieren, um unser Design von der Website zu matchen */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Outfit:wght@500;700&display=swap');
+        
+        html, body, [class*="css"] {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.02em;
+        }
+        
+        .game-button button {
+            font-size: 50px !important;
             width: 100px !important;
             height: 100px !important;
             margin: 5px !important;
-            padding: 0px !important;}
-    }
+            padding: 0px !important;
+            border-radius: 16px !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            background-color: rgba(30, 31, 35, 0.6) !important;
+            transition: all 0.3s ease !important;
+        }
+        .game-button button:hover {
+            border-color: rgba(255, 140, 120, 0.5) !important;
+            background-color: rgba(45, 47, 53, 0.8) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .backlink {
+            text-decoration: none;
+            color: #ff8c78;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: color 0.3s;
+        }
+        .backlink:hover {
+            color: #ffad82;
+            text-decoration: underline;
+        }
     </style>
     """,
     unsafe_allow_html=True
 )
+
+st.markdown('<a href="https://qwertzlich.github.io/mywebsite" target="_self" class="backlink">⬅️ Zurück zu meiner Website</a>', unsafe_allow_html=True)
 
 st.title('Welcome to PvE Tic-Tac-Toe!')
 
