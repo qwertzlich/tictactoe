@@ -7,7 +7,6 @@ st.set_page_config(page_title="PvE Tic-Tac-Toe", page_icon="⚡")
 st.markdown(
     """
     <style>
-        /* Schriften importieren, um unser Design von der Website zu matchen */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Outfit:wght@500;700&display=swap');
         
         html, body, [class*="css"] {
@@ -19,22 +18,73 @@ st.markdown(
             letter-spacing: -0.02em;
         }
         
-        .game-button button {
-            font-size: 50px !important;
-            width: 100px !important;
-            height: 100px !important;
-            margin: 5px !important;
-            padding: 0px !important;
-            border-radius: 16px !important;
-            border: 1px solid rgba(255, 255, 255, 0.06) !important;
-            background-color: rgba(30, 31, 35, 0.6) !important;
-            transition: all 0.3s ease !important;
+        /* -------------------------------------------------------------
+           GRID BUTTONS (TicTacToe Boxes, kind="secondary")
+           ------------------------------------------------------------- */
+        div[data-testid="stButton"]:has(button[kind="secondary"]),
+        button[kind="secondary"] {
+            height: 70px !important;
+            min-height: 70px !important;
+            max-height: 70px !important;
+            box-sizing: border-box !important;
+            margin: 0 !important;
         }
-        .game-button button:hover {
-            border-color: rgba(255, 140, 120, 0.5) !important;
-            background-color: rgba(45, 47, 53, 0.8) !important;
+        button[kind="secondary"] {
+            font-size: 35px !important;
+            line-height: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 16px !important;
+            border: none !important;
+            transition: all 0.3s ease !important;
+            padding: 0 !important;
+        }
+
+        /* Status: UNCLICKED (Orange Gradient, Dummy-X invisible) */
+        button[kind="secondary"]:not(:disabled) {
+            background: linear-gradient(135deg, #ff8c78 0%, #ffad82 100%) !important;
+            box-shadow: 0 4px 10px rgba(255, 140, 120, 0.2);
+        }
+        button[kind="secondary"]:not(:disabled),
+        button[kind="secondary"]:not(:disabled) * {
+            color: transparent !important;
+        }
+        button[kind="secondary"]:not(:disabled):hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 20px rgba(255, 140, 120, 0.4) !important;
+        }
+
+        /* Status: CLICKED (Dark Background, white Text for X/O) */
+        button[kind="secondary"]:disabled {
+            background: rgba(30, 31, 35, 0.6) !important;
+            border: 2px solid rgba(255, 255, 255, 0.06) !important;
+        }
+        button[kind="secondary"]:disabled,
+        button[kind="secondary"]:disabled * {
+            color: #fcfcfc !important;
+            opacity: 1 !important; 
+        }
+
+        /* -------------------------------------------------------------
+           RESTART BUTTON (kind="primary")
+           ------------------------------------------------------------- */
+        button[kind="primary"] {
+            background: linear-gradient(135deg, #ff8c78 0%, #ffad82 100%) !important;
+            color: #111 !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+            transition: all 0.3s ease !important;
+            padding: 0.8rem 1.6rem !important;
+        }
+        button[kind="primary"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 140, 120, 0.4) !important;
+            color: #111 !important;
+        }
+        button[kind="primary"] * {
+            color: #111 !important;
         }
         
         .backlink {
@@ -66,7 +116,7 @@ if 'board' not in st.session_state:
 if 'game_over' not in st.session_state:
     st.session_state['game_over'] = False
 
-if st.button('(Re)-Start Game', key = 'restart'):
+if st.button('(Re)-Start Game', key='restart', type='primary', use_container_width=True):
     board = np.zeros((3, 3), dtype = np.int32)
     st.session_state['board'] = board
     st.session_state['game_over'] = False
@@ -85,13 +135,12 @@ cols = st.columns(3)
 for col in range(3):
     with cols[col]:
         for row in range(3):
-            st.markdown('<div class="game-button">', unsafe_allow_html=True)
             if st.session_state['board'][row, col] == 1:
                 st.button('X', key = f'button_{row}{col}', disabled=True, use_container_width=True)
             elif st.session_state['board'][row, col] == -1:
                 st.button('O', key = f'button_{row}{col}', disabled=True, use_container_width=True)
             else:
-                if st.button('', key = f'button_{row}{col}', use_container_width=True):
+                if st.button('X\u200b', key = f'button_{row}{col}', use_container_width=True):
                     st.session_state['board'][row, col] = players(st.session_state['board'])
                     if not np.count_nonzero(st.session_state['board']) == 9:
                         r, c = minimax(st.session_state['board'])
@@ -100,7 +149,6 @@ for col in range(3):
                     else:
                         st.session_state['game_over'] = True
                         st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
 
 if st.session_state['game_over']:
     st.write('The Game is over! Press the button above to restart the game.')
