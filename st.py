@@ -104,7 +104,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown('<a href="https://qwertzlich.github.io/mywebsite" target="_self" class="backlink">⬅️ Zurück zu meiner Website</a>', unsafe_allow_html=True)
+st.markdown('<a href="https://qwertzlich.github.io" target="_self" class="backlink">⬅️ Zurück zu meiner Website</a>', unsafe_allow_html=True)
 
 st.title('Welcome to PvE Tic-Tac-Toe!')
 
